@@ -1,0 +1,9 @@
+import json
+
+dados = {
+    "filme":"matrix",
+    "ano":1999,
+    "genero":"ficção cientifica"
+}
+json_formatado = json.dumps(dados,indent=4)
+print(json_formatado)
