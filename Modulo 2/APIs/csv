@@ -1,0 +1,7 @@
+import csv
+
+abrir_arquivo = open ("dados.csv")
+ler_arquivo = csv.reader(abrir_arquivo)
+
+for linha in ler_arquivo:
+    print(linha)
