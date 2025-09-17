@@ -1,0 +1,105 @@
+import pygame
+import random
+
+# Inicializa o pygame
+pygame.init()
+
+# Cores
+BRANCO = (255, 255, 255)
+PRETO = (0, 0, 0)
+VERMELHO = (255, 0, 0)
+AZUL = (0, 0, 255)
+CINZA = (200, 200, 200)
+
+# Tamanho da janela
+LARGURA = 500
+ALTURA = 700
+tela = pygame.display.set_mode((LARGURA, ALTURA))
+pygame.display.set_caption("Jogo de Carro - Versão Simplificada")
+
+# Clock
+clock = pygame.time.Clock()
+
+# Tamanho dos carros
+LARG_CARRO = 50
+ALT_CARRO = 100
+
+# Classe do jogador
+class Jogador:
+    def __init__(self):
+        self.x = LARGURA // 2 - LARG_CARRO // 2
+        self.y = ALTURA - ALT_CARRO - 20
+        self.vel = 5
+        self.cor = AZUL
+
+    def mover(self, teclas):
+        if teclas[pygame.K_LEFT] and self.x > 0:
+            self.x -= self.vel
+        if teclas[pygame.K_RIGHT] and self.x < LARGURA - LARG_CARRO:
+            self.x += self.vel
+
+    def desenhar(self):
+        pygame.draw.rect(tela, self.cor, (self.x, self.y, LARG_CARRO, ALT_CARRO))
+
+# Classe dos inimigos
+class Inimigo:
+    def __init__(self):
+        self.x = random.randint(0, LARGURA - LARG_CARRO)
+        self.y = random.randint(-700, -100)
+        self.vel = 5
+        self.cor = VERMELHO
+
+    def mover(self):
+        self.y += self.vel
+        if self.y > ALTURA:
+            self.y = random.randint(-700, -100)
+            self.x = random.randint(0, LARGURA - LARG_CARRO)
+
+    def desenhar(self):
+        pygame.draw.rect(tela, self.cor, (self.x, self.y, LARG_CARRO, ALT_CARRO))
+
+# Função principal
+def main():
+    rodando = True
+    jogador = Jogador()
+    inimigos = [Inimigo() for _ in range(3)]
+    pontos = 0
+    fonte = pygame.font.SysFont(None, 36)
+
+    while rodando:
+        clock.tick(60)
+        tela.fill(CINZA)
+
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                rodando = False
+
+        teclas = pygame.key.get_pressed()
+        jogador.mover(teclas)
+        jogador.desenhar()
+
+        for inimigo in inimigos:
+            inimigo.mover()
+            inimigo.desenhar()
+
+            # Verificar colisão
+            if jogador.x < inimigo.x + LARG_CARRO and jogador.x + LARG_CARRO > inimigo.x and \
+               jogador.y < inimigo.y + ALT_CARRO and jogador.y + ALT_CARRO > inimigo.y:
+                texto = fonte.render("Game Over!", True, PRETO)
+                tela.blit(texto, (LARGURA // 2 - 80, ALTURA // 2))
+                pygame.display.update()
+                pygame.time.delay(2000)
+                rodando = False
+
+            # Contar pontos quando o inimigo volta
+            if inimigo.y == -100:
+                pontos += 1
+
+        texto_pontos = fonte.render(f"Pontos: {pontos}", True, PRETO)
+        tela.blit(texto_pontos, (10, 10))
+
+        pygame.display.update()
+main()
+pygame.quit()
+
+# Executar o jogo 
