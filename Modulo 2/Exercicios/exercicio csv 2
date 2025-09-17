@@ -1,0 +1,8 @@
+import csv
+abrir_arquivo = open("dados.csv")
+ler_arquivo = csv.DictReader(abrir_arquivo)
+for linha in ler_arquivo:
+    print(linha)
+for carro in ler_arquivo:
+    if carro["ano"] == int(2020)
+       print(carro)
