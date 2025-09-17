@@ -1,0 +1,16 @@
+def contas_divisão():
+    print("contas divisão")
+    try:
+        numero1 =float(input("digite o primeiro numero"))
+        numero2 =float(input("digite o segundo numero"))
+        resultado = numero1/numero2
+    except ValueError as erro:
+        print(f"{erro}:digite apenas um numero")
+    except:
+        print("não e possivel dividir por zero")
+    else:
+        print(f"o resultado da divisão e:{resultado:2}")
+    finally:
+        print("finalizando o sistema...")
+        
+contas_divisão()
